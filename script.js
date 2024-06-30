@@ -1,5 +1,5 @@
 
-
+//generates a random choice for computer
 function getComputerChoice(){
     let rNum=Math.floor(Math.random()*3)+1;
     let compChoice;
