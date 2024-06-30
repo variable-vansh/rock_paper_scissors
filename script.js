@@ -1,4 +1,5 @@
-// to get the computer's choice:
+
+
 function getComputerChoice(){
     let rNum=Math.floor(Math.random()*3)+1;
     let compChoice;
@@ -18,68 +19,69 @@ function getComputerChoice(){
     return compChoice;
 }
 
-// to get human choice:
-function getHumanChoice(){
-    let humanChoice;
-    let humanChoiceNum=prompt("Press 1 for ROCK, 2 for PAPER, 3 for Scissors");
-    switch(parseInt(humanChoiceNum)){
-        case 1:
-            humanChoice= "Rock";
-            break;
-        case 2:
-            humanChoice= "Paper";
-            break;
-        case 3:
-            humanChoice= "Scissors";
-            break;
-        default:
-            console.log("Invalid Input ＼(｀0´)／¯")
-    }
-    return humanChoice;
-}
-
-//initialized scores
+//initialized scores and winner text
 let humanScore=0;
 let computerScore=0;
+let winner="";
 
-// Logic to play single round
-function playOneRound(){
-    let compChoice = getComputerChoice();
-    let humanChoice = getHumanChoice();
-    console.log(`Computer picked ${compChoice}`);
-    console.log(`Player picked ${humanChoice}`);
-
+//runs the logic by comparing player's and computer's choice
+// sets value to resultText, and increments scores
+function game_logic(compChoice, humanChoice){
     if(compChoice==="Paper" && humanChoice==="Rock" ||compChoice==="Rock" && humanChoice==="Scissors" || compChoice==="Scissors" && humanChoice==="Paper"){
         computerScore++;
     }else if(compChoice==="Rock" && humanChoice==="Paper" ||compChoice==="Scissors" && humanChoice==="Rock" || compChoice==="Paper" && humanChoice==="Scissors"){
-        humanScore++;
+        humanScore++;      
     }else if(compChoice===humanChoice){
-        console.log("Draw");
+        //Draw
     }
     else {
-        console.log("IDK how you are seeing this")
+    console.log("IDK how you are seeing this")
     }
-
-    console.log(`Score Computer: ${computerScore}, Player: ${humanScore}`);
-
-    console.log("----------------------------------------------------------------")
 }
 
-function playGame(){
+//this function updates score and gives out: 1)who won, 2)score-card
+//it also disables buttons when either of the two have won
+function playOneRound(humanChoice){
+    let compChoice = getComputerChoice();
 
-    while(humanScore<5 && computerScore <5){
-        playOneRound();
-        alert("Press OK when You are ready for the next Round")
-    }
+    game_logic(compChoice, humanChoice)
 
-    let winner;
-    if(humanScore===5){
+    if(humanScore==5){
         winner="PLAYER";
-    }else if(computerScore===5){
+        disable(winner)
+    }else if(computerScore==5){
         winner="COMPUTER";
+        disable(winner)
     }
 
-    console.log(`${winner} WON !!!! CONGRATULATIONS`)
+    // resultDiv.innerHTML=`${resultText}`;
+    
+    scoreDiv.innerHTML=`Computer=${computerScore} : Player=${humanScore}`
 }
 
-playGame();
+//adresses the button elements
+const btn_rock=document.getElementById("Rock");
+const btn_paper=document.getElementById("Paper");
+const btn_scissors=document.getElementById("Scissors")
+
+//addresses the result and score div for further use
+const resultDiv = document.querySelector("#result");
+const scoreDiv = document.querySelector("#score");
+
+//add event listeners to each button
+//tells what to do when each button is clicked
+btn_rock.addEventListener("click", () => {playOneRound("Rock");});
+btn_paper.addEventListener("click", () => {playOneRound("Paper");});
+btn_scissors.addEventListener("click", () => {playOneRound("Scissors");});
+
+//disables the buttons when either wins
+//also displays the winner
+function disable(winner){
+    btn_paper.disabled=true;
+    btn_rock.disabled=true;
+    btn_scissors.disabled=true;
+    console.log("Disabled buttons")
+    resultDiv.innerHTML=`${winner} WON THE GAME`;
+}
+
+
